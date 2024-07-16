@@ -1,9 +1,16 @@
 import React from 'react';
+import { FaPlus } from 'react-icons/fa';
 
 const Navbar = () => {
     return (
-        <header className="bg-gray-800 text-white text-center py-4 rounded-t-lg">
+        <header className="bg-gray-800 text-white text-center py-4 rounded-t-lg flex justify-between items-center px-4">
             <h1 className="text-2xl font-bold">TaskMaster Pro</h1>
+            <div className="flex justify-end my-5"> 
+            <button className="flex items-center px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
+                <FaPlus className="mr-2" />
+                Add task
+            </button>
+            </div>
         </header>
     );
 };
