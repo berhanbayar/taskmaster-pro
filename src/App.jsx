@@ -4,7 +4,7 @@ import List from './components/content/List';
 import { useState, useEffect } from 'react';
 
 const App = () => {
-  const [data, setData] = useState(null);
+  const [tasks, setTasks] = useState(null);
   fetch('https://localhost:7101/api/Tasks')
   .then(response => {
     if (!response.ok) {
@@ -14,15 +14,16 @@ const App = () => {
   })
   .then(data => {
     //console.log("data", data)
-    setData(data);
+    setTasks(data);
   })
   .catch(error => {
     console.log("error:", error)
   });
   return (
     <div className='h-screen bg-customBg'>
-      <List data={data}/>
+      <List data={tasks}/>
     </div>
+    
   )
 }
 
