@@ -6,8 +6,8 @@ import Modal from '../modals/CreateTaskModal'
 const Navbar = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [task, setTask] = useState({
-        title: "Default Task Title",
-        description: "Default Task Description"
+        title: "",
+        description: ""
     });
 
     const openModal = () => {
