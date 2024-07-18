@@ -2,10 +2,10 @@ import React from 'react'
 import Navbar from '../header/Navbar';
 import { FaTrash, FaEdit } from 'react-icons/fa';
 
-function List() {
+function List({data}) {
   const tasks = [
     {
-      title: 'GraphQL API',
+      title: data?.[0]?.title,
       status: 'Complete',
       dueDate: 'March 17, 2023',
       createdBy: 'Leslie Alexander',
@@ -81,7 +81,7 @@ function List() {
      <div className="flex flex-col items-center justify-center h-screen bg-customBg p-4">
      <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg sm:rounded-t-none sm:rounded-b-lg">
        {/* CardHeader Bileşeni */}
-       <Navbar />
+       <Navbar/>
        
        {/* Kartın İçeriği */}
         <div className="max-w-2xl mx-auto  bg-white shadow rounded">
