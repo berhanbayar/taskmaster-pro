@@ -4,10 +4,12 @@ import { FaTrash, FaEdit, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { BiDetail } from 'react-icons/bi';
 import DetailsModal from '../modals/DetailsModal';
 import CreateTaskModal from '../modals/CreateTaskModal';
+//import DeleteModal from '../modals/DeleteModal';
 
 function List({ data }) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
   const openCreateModal = (task) => {
@@ -30,6 +32,17 @@ function List({ data }) {
     setSelectedTask(null);
   };
 
+  const openDeleteModal = (task) => {
+    setSelectedTask(task);
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setSelectedTask(null);
+  };
+
+
   const handleSave = (savedTask) => {
     // Handle saved task if needed (e.g., update local state)
     // Optionally, you can re-fetch the tasks here to update the list
@@ -48,7 +61,7 @@ function List({ data }) {
 
       if (response.ok) {
         alert(`Task updated to ${newStatus} successfully`);
-        window.location.reload();  // Sayfayı yenileyerek verileri güncelle
+        //window.location.reload();  // Sayfayı yenileyerek verileri güncelle
       } else {
         console.error('Failed to update task status', response.statusText);
       }
@@ -60,7 +73,7 @@ function List({ data }) {
   const toggleViewedTask = (id, currentStatus) => {
     const newStatus = currentStatus === 'Complete' ? 'In Progress' : 'Complete';
     updateTaskStatus(id, newStatus);
-  };
+  };  
 
   async function deleteTask(id) {
     console.log("silenecek id:", id);
@@ -83,12 +96,12 @@ function List({ data }) {
       <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg sm:rounded-t-none sm:rounded-b-lg">
         <Navbar />
         {data?.length > 0 ? (
-          data?.map(item => (
+          data?.sort((a, b) => b.id - a.id).map(item => (
             <div key={item.id} className={`flex justify-between items-center p-4 border-b ${item.status === 'Complete' ? 'opacity-50' : ''}`}>
               <div>
                 <h3 className="text-lg font-semibold">{item.title}</h3>
                 <p className="text-sm text-gray-500">Due on {item.createdAt}</p>
-                <span className={`inline-block px-2 py-1 text-xs font-semibold ${item.status === 'Complete' ? 'text-green-800 bg-green-200' : 'text-yellow-800 bg-yellow-200'} rounded`}>
+                <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1  ${item.status === 'Complete' ? 'text-green-800 bg-green-200 ring-green-600/20' : 'text-yellow-800 bg-yellow-200 ring-yellow-600/20'} rounded`}>
                   {item.status}
                 </span>
               </div>
@@ -113,7 +126,7 @@ function List({ data }) {
           ))
         ) : (
           <div className="flex justify-between items-center p-4 border-b ">
-            <p className="text-lg font-semibold items-center">Şuanda yapmanız gereken hiçbir görev yok</p>
+            <p className="text-lg font-semibold items-center">Şu anda yapmanız gereken hiçbir görev yok</p>
           </div>
         )}
       </div>
