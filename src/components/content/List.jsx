@@ -4,7 +4,7 @@ import { FaTrash, FaEdit, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { BiDetail } from 'react-icons/bi';
 import DetailsModal from '../modals/DetailsModal';
 import CreateTaskModal from '../modals/CreateTaskModal';
-//import DeleteModal from '../modals/DeleteModal';
+import DeleteModal from '../modals/DeleteModal';
 
 function List({ data }) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -118,7 +118,7 @@ function List({ data }) {
                         onClick={() => toggleViewedTask(item.id, item.status)}>
                         {item.status === 'Complete' ? <FaEyeSlash /> : <FaEye />}
                 </button>
-                <button className="p-2 text-red-500 hover:bg-red-100 rounded" onClick={() => deleteTask(item.id)}>
+                <button className="p-2 text-red-500 hover:bg-red-100 rounded" onClick={() => openDeleteModal(item)}>
                   <FaTrash />
                 </button>
               </div>
@@ -150,6 +150,16 @@ function List({ data }) {
           // Diğer gerekli prop'lar burada tanımlanabilir
         />
       )}
+
+      {isDeleteModalOpen && selectedTask &&(
+        <DeleteModal
+          isOpen={isDeleteModalOpen}
+          onClose={closeDeleteModal}
+          taskId={selectedTask.id}
+        // Diğer gerekli prop'lar burada tanımlanabilir
+        />
+      )}
+
       
     </div>
   );
