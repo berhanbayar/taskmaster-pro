@@ -1,11 +1,11 @@
 import ReactDOM from 'react-dom';
-import {useEffect, useState } from 'react';
+import { useToast } from '../ToastContext';
 
-const DeleteModal = ({isOpen, onClose, taskId}) => {
+const DeleteModal = ({isOpen, onClose, taskId, taskTitle}) => {
+const { notify } = useToast();
 
-const [TaskId, setTaskId] = useState(null);
 
-async function deleteTask(id) {
+async function deleteTask(id, title) {
     console.log("silenecek id:", id);
     const response = await fetch(`https://localhost:7101/api/Tasks/delete/${id}`, {
       method: 'GET',
@@ -15,16 +15,14 @@ async function deleteTask(id) {
     });
 
     if (response.ok) {
-      alert("Task deleted successfully");
+      notify('This ' + title + ' task is deleted!', 'success');
       onClose(true);
     } else {
+      notify('Failed to delete this ' + title , 'error');
       console.error('Failed to delete task', response.statusText);
     }
   }
 
-useEffect(() => {
-    setTaskId(taskId);
-  }, [taskId]);
 
 if (!isOpen) return null;
  
@@ -51,7 +49,7 @@ return ReactDOM.createPortal (
                   Are you sure you want to delete this task?
                 </h3>
                 <button
-                  onClick={() => deleteTask(taskId)}
+                  onClick={() => deleteTask(taskId, taskTitle)}
                   type="button"
                   className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
                 >

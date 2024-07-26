@@ -1,27 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { useState, useEffect } from 'react';
+import { useToast } from '../ToastContext';
 
 
 const CreateTaskModal = ({ isOpen, onClose, initialTitle, initialDescription, taskId, onSave }) => {
   const [title, setTitle] = useState(initialTitle || '');
   const [description, setDescription] = useState(initialDescription || '');
   const [isEditing, setIsEditing] = useState(false);
+  const { notify } = useToast();
 
-  useEffect(() => {
-    if (taskId) {
-      // Eğer bir id varsa, düzenleme modunda olduğunu belirt
-      setIsEditing(true);
-    } else {
-      setIsEditing(false);
-    }
-  }, [taskId]);
+  
 
-
-  if (!isOpen) return null;
-
-
-  const handleSave = async () => {
+  async function handleSave() {
     if (!title) {
       alert("Title is required.");
       return;
@@ -44,7 +35,6 @@ const CreateTaskModal = ({ isOpen, onClose, initialTitle, initialDescription, ta
 
       if (response.ok) {
         const savedTask = await response.json();
-        alert("Task saved successfully");
         onSave(savedTask);
         onClose();
       } else {
@@ -56,6 +46,17 @@ const CreateTaskModal = ({ isOpen, onClose, initialTitle, initialDescription, ta
       alert("Failed to save task");
     }
   };
+
+  useEffect(() => {
+    if (taskId) {
+      // Eğer bir id varsa, düzenleme modunda olduğunu belirt
+      setIsEditing(true);
+    } else {
+      setIsEditing(false);
+    }
+  }, [taskId]);
+
+  if (!isOpen) return null;
 
   return ReactDOM.createPortal(
     <div>
@@ -75,14 +76,14 @@ const CreateTaskModal = ({ isOpen, onClose, initialTitle, initialDescription, ta
                 className="text-white bg-transparent hover:bg-white hover:text-gray-800 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
                 onClick={onClose}
               >
-                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                 </svg>
                 <span className="sr-only">Close modal</span>
               </button>
             </div>
             {/* Modal body */}
-            <form className="p-4 md:p-5">
+            <form className="p-4 md:p-5" onSubmit={() => handleSave()}>
               <div className="grid gap-4 mb-4 grid-cols-2">
                 <div className="col-span-2">
                   <label
@@ -123,7 +124,7 @@ const CreateTaskModal = ({ isOpen, onClose, initialTitle, initialDescription, ta
               <button
                 type="submit"
                 className="text-white inline-flex place-items-end  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-4 text-center"
-                onClick={handleSave}
+                
               >
                 {isEditing ? 'Save Task' : 'Add Task'}
 

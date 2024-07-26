@@ -5,12 +5,15 @@ import { BiDetail } from 'react-icons/bi';
 import DetailsModal from '../modals/DetailsModal';
 import CreateTaskModal from '../modals/CreateTaskModal';
 import DeleteModal from '../modals/DeleteModal';
+import { useToast } from '../ToastContext';
+
 
 function List({ data }) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const { notify } = useToast();
 
   const openCreateModal = (task) => {
     setSelectedTask(task);
@@ -60,8 +63,11 @@ function List({ data }) {
       });
 
       if (response.ok) {
-        alert(`Task updated to ${newStatus} successfully`);
-        //window.location.reload();  // Sayfayı yenileyerek verileri güncelle
+        if (newStatus == 'In Progress') {
+          notify('Task ' + newStatus, 'warning');
+        } else {
+          notify('Task ' + newStatus, 'success');
+        }
       } else {
         console.error('Failed to update task status', response.statusText);
       }
@@ -156,6 +162,7 @@ function List({ data }) {
           isOpen={isDeleteModalOpen}
           onClose={closeDeleteModal}
           taskId={selectedTask.id}
+          taskTitle={selectedTask.title}
         // Diğer gerekli prop'lar burada tanımlanabilir
         />
       )}
